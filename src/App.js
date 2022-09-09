@@ -1,12 +1,10 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import MainPage from "./components/MainPage";
 import SearchPage from "./components/SearchPage";
+import MainPage from "./components/MainPage";
 import "./App.css";
 import * as API from "./components/BooksAPI";
 
-// Class component has a lifted state items that going to change
-// and passed to different components
 const MyReads = () => {
   const [books, setBooks] = React.useState([]);
 
