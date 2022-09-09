@@ -1,9 +1,11 @@
+import "./App.css";
+
 import React from "react";
 import { Route } from "react-router-dom";
+import * as API from "./components/BooksAPI";
+
 import SearchPage from "./components/SearchPage";
 import MainPage from "./components/MainPage";
-import "./App.css";
-import * as API from "./components/BooksAPI";
 
 const MyReads = () => {
   const [books, setBooks] = React.useState([]);
