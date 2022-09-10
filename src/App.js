@@ -18,7 +18,7 @@ const MyReads = () => {
     getAllBooks();
   }, []);
 
-  const updateBookState = (e, book) => {
+  const updateBook = (e, book) => {
     const shelf = e.target.value;
     if (books) {
       API.update(book, shelf).then(() => {
@@ -35,10 +35,10 @@ const MyReads = () => {
   return (
     <div className="app">
       <Route exact path="/">
-        <MainPage books={books} updateBookState={updateBookState} />
+        <MainPage books={books} updateBook={updateBook} />
       </Route>
       <Route exact path="/search">
-        <SearchPage books={books} updateBookState={updateBookState} />
+        <SearchPage books={books} updateBook={updateBook} />
       </Route>
     </div>
   );
