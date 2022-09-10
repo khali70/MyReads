@@ -1,44 +1,43 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Shelf from "./Shelf";
-import "../App.css";
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
 
-const MainPage = ({ books, updateBookState }) => {
+const MainPage = (props) => {
+  const { books, updateBook } = props;
   return (
     <div className="list-books">
       <div className="list-books-title">
-        <h1>My Reads</h1>
+        <h1>MyReads</h1>
       </div>
       <div className="list-books-content">
         <div>
           <Shelf
-            updateBookState={updateBookState}
-            books={books.filter((book) => book.shelf === "currentlyReading")}
             title="Currently Reading"
+            books={books.filter((book) => book.shelf === "currentlyReading")}
+            updateBook={updateBook}
           />
           <Shelf
-            updateBookState={updateBookState}
-            books={books.filter((book) => book.shelf === "wantToRead")}
             title="Want to Read"
+            books={books.filter((book) => book.shelf === "wantToRead")}
+            updateBook={updateBook}
           />
           <Shelf
-            updateBookState={updateBookState}
-            books={books.filter((book) => book.shelf === "read")}
             title="Read"
+            books={books.filter((book) => book.shelf === "read")}
+            updateBook={updateBook}
           />
         </div>
       </div>
       <div className="open-search">
-        <Link to="/search">Add</Link>
+        <Link to="/search">Add a book</Link>
       </div>
     </div>
   );
 };
-
 MainPage.propTypes = {
-  books: PropTypes.array,
-  updateBookState: PropTypes.func,
+  books: propTypes.array,
+  updateBook: propTypes.func,
 };
 
 export default MainPage;

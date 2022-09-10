@@ -1,51 +1,52 @@
 import React from "react";
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
+const BookElement = (props) => {
+  const {
+    book: { imageLinks, shelf, authors, title },
+    updateBook,
+    searchShelf,
+  } = props;
 
-const Book = ({ book, updateBookState, searchShelf }) => {
+  const handelChanger = (e) => {
+    updateBook(e, props.book);
+  };
   return (
-    <div>
-      <li key={book.id}>
-        <div className="book">
-          <div className="book-top">
-            <div
-              className="book-cover"
-              style={{
-                width: 128,
-                height: 193,
-                backgroundImage: `url("${
-                  book.imageLinks && book.imageLinks.thumbnail
-                }")`,
-              }}
-            ></div>
-            <div className="book-shelf-changer">
-              <select
-                defaultValue={book.shelf ? book.shelf : searchShelf}
-                onChange={(e) => updateBookState(e, book)}
-              >
-                <option value="moveTo" disabled>
-                  Move to...
-                </option>
-                <option value="currentlyReading">Currently Reading</option>
-                <option value="wantToRead">Want to Read</option>
-                <option value="read">Read</option>
-                <option value="none">None</option>
-              </select>
-            </div>
-          </div>
-          <div className="book-title">{book.title}</div>
-          <div className="book-authors">
-            {book.authors ? book.authors : "No Author"}
+    <li>
+      <div className="book">
+        <div className="book-top">
+          <div
+            className="book-cover"
+            style={{
+              width: 128,
+              height: 193,
+              backgroundImage: `url("${imageLinks.thumbnail}")`,
+            }}
+          ></div>
+          <div className="book-shelf-changer">
+            <select
+              defaultValue={shelf || searchShelf}
+              onChange={handelChanger}
+            >
+              <option value="none" disabled>
+                Move to...
+              </option>
+              <option value="currentlyReading">Currently Reading</option>
+              <option value="wantToRead">Want to Read</option>
+              <option value="read">Read</option>
+              <option value="none">None</option>
+            </select>
           </div>
         </div>
-      </li>
-    </div>
+        <div className="book-title">{title}</div>
+        <div className="book-authors">{authors || "unknown Author"}</div>
+      </div>
+    </li>
   );
 };
-
-Book.propTypes = {
-  book: PropTypes.object,
-  updateBookState: PropTypes.func,
-  searchShelf: PropTypes.string,
+BookElement.propTypes = {
+  book: propTypes.object,
+  searchShelf: propTypes.string,
+  updateBook: propTypes.func,
 };
 
-export default Book;
+export default BookElement;

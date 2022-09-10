@@ -5,23 +5,29 @@ import * as API from "./BooksAPI";
 import PropTypes from "prop-types";
 import { debounce } from "lodash";
 
-const SearchPage = ({ books, updateBookState }) => {
+const SearchPage = ({ books, updateBook }) => {
   const [filteredBox, setFilteredBox] = React.useState([]);
+  const [booksIds, setBooksIds] = React.useState({});
 
+  // create hash map of book ids and shelf type
+  React.useEffect(() => {
+    books.forEach((book) => {
+      setBooksIds((bookIds) => {
+        bookIds[book.id] = book.shelf;
+        return bookIds;
+      });
+    });
+  }, []);
   // to fix fetching experience DEBOUNCE was implemented
   const queryEqualStateSearch = debounce((query) => {
-    if (query) {
-      query = query ? query : " ";
-      API.search(query).then((filteredBox) => {
-        if (!filteredBox.error) {
-          setFilteredBox(filteredBox);
-        } else {
-          setFilteredBox([]);
-        }
-      });
-    } else {
-      setFilteredBox([]);
-    }
+    query = query || "";
+    API.search(query).then((filteredBox) => {
+      if (filteredBox !== undefined && filteredBox.length > 0) {
+        setFilteredBox(filteredBox);
+      } else {
+        setFilteredBox([]);
+      }
+    });
   }, 1000);
 
   return (
@@ -33,7 +39,7 @@ const SearchPage = ({ books, updateBookState }) => {
         <div className="search-books-input-wrapper">
           <input
             type="text"
-            placeholder="Search by title or author"
+            placeholder="Search by title, author, or ISBN"
             onChange={(e) => queryEqualStateSearch(e.target.value)}
           />
         </div>
@@ -41,15 +47,13 @@ const SearchPage = ({ books, updateBookState }) => {
       <div className="search-books-results">
         <ol className="books-grid">
           {filteredBox.map((searchedBook) => {
-            let shelf = "none";
-            books.map((book) =>
-              book.id === searchedBook.id ? (shelf = book.shelf) : ""
-            );
+            // get shelf type from book hashMap if found
+            let shelf = booksIds[searchedBook.id] || "none";
             return (
               <div key={searchedBook.id}>
                 <Book
                   book={searchedBook}
-                  updateBookState={updateBookState}
+                  updateBook={updateBook}
                   searchShelf={shelf}
                 />
               </div>
@@ -62,7 +66,7 @@ const SearchPage = ({ books, updateBookState }) => {
 };
 SearchPage.propTypes = {
   booksAfterSearch: PropTypes.array,
-  updateBookState: PropTypes.func,
   queryEqualStateSearch: PropTypes.func,
+  updateBook: PropTypes.func,
 };
 export default SearchPage;
