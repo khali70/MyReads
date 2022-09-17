@@ -19,7 +19,7 @@ const BookElement = (props) => {
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url("${imageLinks.thumbnail}")`,
+              backgroundImage: `url("${imageLinks && imageLinks.thumbnail}")`,
             }}
           ></div>
           <div className="book-shelf-changer">
@@ -27,7 +27,7 @@ const BookElement = (props) => {
               defaultValue={shelf || searchShelf}
               onChange={handelChanger}
             >
-              <option value="none" disabled>
+              <option value="moveto" disabled>
                 Move to...
               </option>
               <option value="currentlyReading">Currently Reading</option>
