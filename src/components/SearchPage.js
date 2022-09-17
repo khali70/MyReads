@@ -7,17 +7,20 @@ import { debounce } from "lodash";
 
 const SearchPage = ({ books, updateBook }) => {
   const [filteredBox, setFilteredBox] = React.useState([]);
-  const [booksIds, setBooksIds] = React.useState({});
+  
+  const convertBooksToHashMap = () => {
+    return books.reduce((hash, cur) => {
+      hash[cur.id] = cur.shelf;
+      return hash;
+    }, {});
+  };
 
   // create hash map of book ids and shelf type
+  const [booksIds, setBooksIds] = React.useState(convertBooksToHashMap());
   React.useEffect(() => {
-    books.forEach((book) => {
-      setBooksIds((bookIds) => {
-        bookIds[book.id] = book.shelf;
-        return bookIds;
-      });
-    });
-  }, []);
+    setBooksIds(convertBooksToHashMap());
+    console.log(booksIds);
+  }, [books]);
   // to fix fetching experience DEBOUNCE was implemented
   const queryEqualStateSearch = debounce((query) => {
     query = query || "";
@@ -49,6 +52,7 @@ const SearchPage = ({ books, updateBook }) => {
           {filteredBox.map((searchedBook) => {
             // get shelf type from book hashMap if found
             let shelf = booksIds[searchedBook.id] || "none";
+            console.log(shelf);
             return (
               <div key={searchedBook.id}>
                 <Book
